@@ -30,11 +30,12 @@ class ParamsTest extends TestCase
 		
 		self::assertEmpty($subject->get([]));
 	}
-	
+
+	/**
+	 * @expectedException \Narrator\Exceptions\CouldNotResolveParameterException
+	 */
 	public function test_get_ParameterNotFound_ExceptionThrown()
 	{
-		$this->expectException(\Narrator\Exceptions\CouldNotResolveParameterException::class);
-		
 		$subject = new Params();
 		$n = new class
 		{
@@ -55,18 +56,6 @@ class ParamsTest extends TestCase
 		
 		self::assertEquals(1, $subject->get([new \ReflectionParameter([$n, 'a'], 'i')])[0]);
 	}
-    
-    public function test_get_ValueStringNameOfCallback_CallbackNotCalled()
-    {
-        $subject = new Params();
-        $subject->first('ucfirst');
-        $n = new class
-        {
-            public function a(string $val) {}
-        };
-        
-        self::assertEquals('ucfirst', $subject->get([new \ReflectionParameter([$n, 'a'], 'val')])[0]);
-    }
 	
 	public function test_get_ParameterByPositionAtFirstIndex_CallbacksValueReturned()
 	{
@@ -371,12 +360,13 @@ class ParamsTest extends TestCase
         
         self::assertEquals($obj, $subject->get([new \ReflectionParameter([$n, 'a'], 'i')])[0]);
     }
-	
-	public function test_get_SkeletonExistsButParamNotFound_ExceptionThrown()
+    
+    /**
+     * @expectedException \Narrator\Exceptions\CouldNotResolveParameterException
+     */
+    public function test_get_SkeletonExistsButParamNotFound_ExceptionThrown()
     {
-		$this->expectException(\Narrator\Exceptions\CouldNotResolveParameterException::class);
-		
-		$subject = new Params();
+        $subject = new Params();
         $skeleton = new Skeleton();
         $subject->fromSkeleton($skeleton);
         

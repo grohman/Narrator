@@ -37,11 +37,12 @@ class NarratorTest extends TestCase
 		
 		self::assertInstanceOf(IExceptions::class, $subject->exceptions());
 	}
-	
+
+	/**
+	 * @expectedException \Narrator\Exceptions\CallbackExpectedException
+	 */
 	public function test_invoke_NoCallback_ExceptionThrown()
 	{
-		$this->expectException(\Narrator\Exceptions\CallbackExpectedException::class);
-		
 		$subject = new Narrator();
 		$subject->invoke();
 	}
@@ -123,19 +124,21 @@ class NarratorTest extends TestCase
 		self::assertTrue($isCalled);
 	}
 	
+	/**
+	 * @expectedException \Exception
+	 */
 	public function test_invoke_ExceptionHandlerNotSet_ExceptionThrown()
 	{
-		$this->expectException(\Exception::class);
-		
 		$subject = new Narrator();
 		
 		$subject->invoke(function() {throw new \Exception();});
 	}
 	
+	/**
+	 * @expectedException \Narrator\Exceptions\CouldNotResolveParameterException
+	 */
 	public function test_invoke_NoParamHandler_ExceptionThrown()
 	{
-		$this->expectException(\Narrator\Exceptions\CouldNotResolveParameterException::class);
-		
 		$subject = new Narrator();
 		
 		$subject->invoke(function(int $i) {});

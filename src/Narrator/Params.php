@@ -66,7 +66,7 @@ class Params implements IParams
 	
 	private function tryBySubType(\ReflectionParameter $parameter, &$value): bool
 	{
-		$class = $parameter->getClass();
+		$class = get_param_class($parameter);
 		
 		if ($class)
 		{
@@ -117,7 +117,7 @@ class Params implements IParams
 	
 	private function tryFromSkeleton(\ReflectionParameter $parameter, &$value): bool
 	{
-		$class = $parameter->getClass();
+		$class = get_param_class($parameter);
 		
 		if ($class && $this->skeleton)
 		{
